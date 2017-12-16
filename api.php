@@ -119,9 +119,36 @@
 
             break;
 
+            case 'end_slot':
+              if(checkIfAllParametersAreTrue(array('username'))){
+                //require_once 'check_slot.php';
+                    $username = $_POST['username'];
+                    $query = "SELECT * FROM mall WHERE username = '".$username."' ";
+                    $sql = mysqli_query($link,$query);  
+                    $rows = mysqli_num_rows($sql);
+                if($rows>0){
+                    $name = "none";
+                      date_default_timezone_set("Asia/Kolkata");
+                    $time = date('Y-m-d H:i:s'); 
+                    $update = "UPDATE mall SET username = '".$name."', 
+                    occupied = 1, end_time = '".$time."'   WHERE username = '" .$username. "'"; 
+                    $query_update = mysqli_query($link, $update);
+                    if($query_update){
+                         $response['error'] = false; 
+                         $response['message'] = 'Goodbye';
+                   
+                    
+                }
+            }
+                else{
+                  
+                    $response['error'] = true;
+                    $response['message'] = "No slot is there";
+                }
+            }
+          
+            break;
 
-
-            
             default:
             $response['error'] = true; 
             $response['message'] = 'Invalid operation called'; 
