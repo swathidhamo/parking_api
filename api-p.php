@@ -163,7 +163,7 @@
 
             break;
 
-            case 'bringOffers': 
+            case 'bring_offers': 
             /*
                 * 1=>cosmetics
                 * 2=>clothing
@@ -171,23 +171,23 @@
                 * 4=>electronics 
                 * 5=>addons
             */
-            if(checkIfAllParametersAreTrue(array('username','lat','lng'))){
+            if(checkIfAllParametersAreTrue(array('username','lng','lat'))){
                 require_once 'offer.php';
                 if($sql){
                 while($result = mysqli_fetch_assoc($sql)){
                      if($result["kind"]==$pref_one){
                          $response['error'] = false;
                          $response['message'] = 'Hurry up while there is an offer near you !
-                          '.$result["description"].' at '.$result["name"].;
+                          '.$result["description"].' at '.$result["name"];
                      }
                      else if($result["kind"]==$pref_two){
                          $response['error'] = false;
                          $response['message'] = 'Hurry up while there is an offer near you !
-                          '.$result["description"].' at '.$result["name"].;
+                          '.$result["description"].' at '.$result["name"];
                      }
                      else{
                          $response['error'] = true;
-                         $response['message'] = 'No offers near you now !'.;
+                         $response['message'] = 'No offers near you now !';
                          }
                 
                        }
@@ -197,6 +197,9 @@
                  }
            else{
                   $response['error'] = true;
+                  $response['lat'] = $_POST["lat"] + 3.0;
+                  $response['lng'] = $_POST["lng"] + 3.0;
+                  $response['username'] = $_POST["username"];
                   $response['message'] = "All necessary parameters are not there";
             }
 
