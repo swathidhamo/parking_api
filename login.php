@@ -4,15 +4,13 @@
  
 	<?php
 
-     session_start();
-     session_destroy();
-     session_start();
+    
      if(!$link){
       echo "Could not connect";
       echo mysqli_error($link);
      }
      else{
-      echo "Sucesssfully connected";
+      echo "Sucesssfully connected to the database";
 
      
 
