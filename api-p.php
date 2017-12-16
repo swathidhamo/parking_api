@@ -13,7 +13,7 @@
             case 'signup':
             //will be the register page
             if(checkIfAllParametersAreTrue(array('username', 'password','gender','mobile_number',
-                'car_reg', 'car_size') ) ){
+                'car_reg', 'car_size','pref_one','pref_two') ) ){
                 require_once 'register.php';
                 if($result){
                     $response['error'] = false;
@@ -116,8 +116,6 @@
                 else{
                    $response['error'] = true;
                    $response['message'] = 'Unable to locate your car, please try again ';
-
-
                 }
             }
 
@@ -171,19 +169,19 @@
                 * 4=>electronics 
                 * 5=>addons
             */
-            if(checkIfAllParametersAreTrue(array('username','lng','lat'))){
+            if(checkIfAllParametersAreTrue(array('username','longitude','latitude') ) ){
                 require_once 'offer.php';
+
                 if($sql){
                 while($result = mysqli_fetch_assoc($sql)){
-                     if($result["kind"]==$pref_one){
+                     if($result["kind"] == $pref_one){
                          $response['error'] = false;
-                         $response['message'] = 'Hurry up while there is an offer near you !
-                          '.$result["description"].' at '.$result["name"];
+                         $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"]. ' .';
+
                      }
-                     else if($result["kind"]==$pref_two){
+                     else if($result["kind"] == $pref_two){
                          $response['error'] = false;
-                         $response['message'] = 'Hurry up while there is an offer near you !
-                          '.$result["description"].' at '.$result["name"];
+                         $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"];
                      }
                      else{
                          $response['error'] = true;
@@ -195,11 +193,8 @@
                     }
             
                  }
-           else{
+            else{
                   $response['error'] = true;
-                  $response['lat'] = $_POST["lat"] + 3.0;
-                  $response['lng'] = $_POST["lng"] + 3.0;
-                  $response['username'] = $_POST["username"];
                   $response['message'] = "All necessary parameters are not there";
             }
 
