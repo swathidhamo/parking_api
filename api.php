@@ -16,31 +16,35 @@
                 'car_reg', 'car_size') ) ){
                 require_once 'register.php';
                 if($result){
-                    $response['error'] = false; 
-                    $response['message'] = 'User registered successfully'; 
+                    $response['error'] = false;
+                    $response['message'] = 'User registered successfully';
                     $response['user'] = $username;
+                }
+                else{
+                  $response['error'] = true;
+                  $response['message'] = 'Cannot register';
                 }
             }
                 else{
-                    $response['error'] = true; 
-                    $response['message'] = 'Parameters unavaliable'; 
-                } 
-            
-            break; 
+                    $response['error'] = true;
+                    $response['message'] = 'Parameters unavaliable';
+                }
+
+            break;
             case 'login':
             //will be the login part
             if(checkIfAllParametersAreTrue(array('username','password'))){
                 require_once 'login.php';
                 if($rows==1){
-                    $response['error'] = false; 
-                    $response['message'] = 'User successfully logged in'; 
-                    $response['car_size'] = $password_hash; 
+                    $response['error'] = false;
+                    $response['message'] = 'User successfully logged in';
+                    $response['car_size'] = $password_hash;
                     $response['user'] = $username;
                 }
                 else{
-                    $response['error'] = true; 
-                    $response['message'] = 'User unsuccessful'; 
-                    
+                    $response['error'] = true;
+                    $response['message'] = 'Invalid username/password';
+
                 }
             }
             break;
@@ -50,47 +54,47 @@
                 //require_once 'check_slot.php';
                     $username = $_POST['username'];
                     $query = "SELECT * FROM mall WHERE username = '".$username."' ";
-                    $sql = mysqli_query($link,$query);  
+                    $sql = mysqli_query($link,$query);
                     $rows = mysqli_num_rows($sql);
                 if($rows>0){
-                   $response['error'] = true; 
-                   $response['message'] = 'Car is already occupying a slot';  
+                   $response['error'] = true;
+                   $response['message'] = 'Your car is already occupying a slot';
                 }
                 else{
-                 $size = 2; 
+                 $size = 2;
                //  require_once 'fetch_slot.php';
 
                  $username = $_POST['username'];
-                 $query = "SELECT slot FROM mall WHERE max_size <= 3 AND 
+                 $query = "SELECT slot FROM mall WHERE max_size <= 3 AND
                  occupied = 1 ORDER BY max_size ASC LIMIT 1";
-                 $sql = mysqli_query($link,$query);  
-                 $array = mysqli_fetch_assoc($sql);     
+                 $sql = mysqli_query($link,$query);
+                 $array = mysqli_fetch_assoc($sql);
 
                   if($sql){
-                   
+
                     date_default_timezone_set("Asia/Kolkata");
-                    $time = date('Y-m-d H:i:s'); 
-                   
-                    $update = "UPDATE mall SET username = '".$username."', 
-                    occupied = 2, start_time = '".$time."'   WHERE slot = '" .$array['slot']. "'"; 
+                    $time = date('Y-m-d H:i:s');
+
+                    $update = "UPDATE mall SET username = '".$username."',
+                    occupied = 2, start_time = '".$time."'   WHERE slot = '" .$array['slot']. "'";
                     $query_update = mysqli_query($link, $update);
                     if($query_update){
-                         $response['error'] = false; 
-                         $response['message'] = 'Slot fetched for your car is '.$array['slot'].' Have a good time !'; 
+                         $response['error'] = false;
+                         $response['message'] = 'Slot for your car is '.$array['slot'].' ';
                     }
                     else{
                           echo mysqli_error($link);
-                          $response['error'] = true; 
-                         $response['message'] = 'Cannot process request'; 
+                          $response['error'] = true;
+                         $response['message'] = 'Cannot process request';
                     }
-                    
+
                   }
                   else{
                     $response['error'] = true;
-                    $response['message'] = "No slot is there";
+                    $response['message'] = "No slot is currently avaliable";
 
                   }
-                  
+
                 }
             }
 
@@ -100,20 +104,20 @@
                 //require_once 'check_slot.php';
                     $username = $_POST['username'];
                     $query = "SELECT slot FROM mall WHERE username = '".$username."' ";
-                    $sql = mysqli_query($link,$query);  
+                    $sql = mysqli_query($link,$query);
                     $rows = mysqli_num_rows($sql);
-                    $array = mysqli_fetch_assoc($sql); 
+                    $array = mysqli_fetch_assoc($sql);
 
                 if($rows>0){
-                   $response['error'] = false; 
-                   $response['message'] = 'Car is occupying slot '.$array['slot'].
-                   '  Thank you for visiting';  
+                   $response['error'] = false;
+                   $response['message'] = 'Your car is occupying slot '.$array['slot'].
+                   ' ';
                 }
                 else{
-                   $response['error'] = true; 
-                   $response['message'] = 'No slot found ';  
+                   $response['error'] = true;
+                   $response['message'] = 'Unable to locate your car, please try again ';
 
-                  
+
                 }
             }
 
@@ -124,49 +128,49 @@
                 //require_once 'check_slot.php';
                     $username = $_POST['username'];
                     $query = "SELECT * FROM mall WHERE username = '".$username."' ";
-                    $sql = mysqli_query($link,$query);  
+                    $sql = mysqli_query($link,$query);
                     $rows = mysqli_num_rows($sql);
                 if($rows>0){
                     $name = "none";
                       date_default_timezone_set("Asia/Kolkata");
-                    $time = date('Y-m-d H:i:s'); 
+                    $time = date('Y-m-d H:i:s');
                     $cost = "SELECT start_time FROM mall WHERE username = '".$username."' ";
-                    $query = mysqli_query($link, $cost); 
+                    $query = mysqli_query($link, $cost);
                     $array = mysqli_fetch_assoc($query);
                     $diff = strtotime($time)-strtotime($array['start_time']);
                     $cost = $diff*.001;
 
 
-                    $update = "UPDATE mall SET username = '".$name."', 
-                    occupied = 1, end_time = '".$time."'   WHERE username = '" .$username. "'"; 
+                    $update = "UPDATE mall SET username = '".$name."',
+                    occupied = 1, end_time = '".$time."'   WHERE username = '" .$username. "'";
                     $query_update = mysqli_query($link, $update);
 
 
                     if($query_update){
-                         $response['error'] = false; 
-                         $response['message'] = 'Goodbye  '.$cost.' is the cost';
-                   
-                    
+                         $response['error'] = false;
+                         $response['message'] = 'Thank you for visiting us ! Rs.  '.$cost.' is the cost';
+
+
                 }
             }
                 else{
-                  
+
                     $response['error'] = true;
                     $response['message'] = "No slot is there";
                 }
             }
-          
+
             break;
 
             default:
-            $response['error'] = true; 
-            $response['message'] = 'Invalid operation called'; 
+            $response['error'] = true;
+            $response['message'] = 'Invalid operation called';
         }
     }
 
     else{
-            $response['error'] = true; 
-            $response['message'] = 'Invalid API call'; 
+            $response['error'] = true;
+            $response['message'] = 'Invalid API call';
     }
 
 
@@ -174,11 +178,11 @@
     function checkIfAllParametersAreTrue($params){
         foreach($params as $param){
             if(!isset($_POST[$param])){
-                return false; 
+                return false;
             }
 
         }
-        return true; //only if all are true 
+        return true; //only if all are true
     }
 
 
