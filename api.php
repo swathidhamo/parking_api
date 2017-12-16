@@ -44,6 +44,40 @@
     			}
     		}
     		break;
+
+            case 'fetch_slot':
+            if(checkIfAllParametersAreTrue(array('username'))){
+                //require_once 'check_slot.php';
+                    $username = $_POST['username'];
+                    $query = "SELECT * FROM mall WHERE username = '".$username."' ";
+                    $sql = mysqli_query($link,$query);  
+                    $rows = mysqli_num_rows($sql);
+                if($rows>0){
+                   $response['error'] = true; 
+                   $response['message'] = 'Car is already occupying a slot';  
+                }
+                else{
+                 $size = 2; 
+               //  require_once 'fetch_slot.php';
+
+                 $username = $_POST['username'];
+                 $query = "SELECT slot FROM mall WHERE max_size <= 1 ORDER BY max_size ASC LIMIT 1";
+                 $sql = mysqli_query($link,$query);  
+                 $array = mysqli_fetch_assoc($sql);     
+
+                  if($sql){
+                    $response['error'] = false; 
+                    $response['message'] = 'Slot fetched for your car is '.$array['slot'].' Have a good time !'; 
+                  }
+                  else{
+                    $response['error'] = true;
+                    $response['message'] = "No slot is there";
+
+                  }
+                  
+                }
+            }
+            break;
     		default:
     		$response['error'] = true; 
             $response['message'] = 'Invalid operation called'; 
