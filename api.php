@@ -29,6 +29,20 @@
     		break; 
     		case 'login':
     		//will be the login part
+    		if(checkIfAllParametersAreTrue(array('username','password'))){
+    			require_once 'login.php';
+    			if($rows==1){
+    				$response['error'] = false; 
+				    $response['message'] = 'User successfully logged in'; 
+				    $response['car_size'] = $password_hash; 
+ 					$response['user'] = $username;
+    			}
+    			else{
+    				$response['error'] = true; 
+				    $response['message'] = 'User unsuccessful'; 
+ 					
+    			}
+    		}
     		break;
     		default:
     		$response['error'] = true; 

@@ -42,15 +42,7 @@
 	?>
 </head>
 <body>
-  <form method = "POST" >
-    Username: <input type = "text" name = "username" placeholder = 'Enter the username'>
-    Password: <input type = "text" name = "password" placeholder = "Enter the password">
-    Car registration number: <input type = "text" name = "serial" placeholder = "Enter the registration number">
-    Car size: <input type = "number" name = "size" placeholder = "Enter the size">
-    Gender: <input type = "number" name = "gender" placeholder = "Enter the gender">
-    Mobile Number: <input type = "text" name = "mobile_number" placeholder = "Enter the phone number">
-    <input type = "submit" name = "register" value = "Signup">
-  </form>
+
 
 </body>
 </html>
