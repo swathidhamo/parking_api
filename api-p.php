@@ -169,30 +169,41 @@
                 * 4=>electronics 
                 * 5=>addons
             */
-            if(checkIfAllParametersAreTrue(array('username','longitude','latitude') ) ){
+            if(checkIfAllParametersAreTrue(array('username') ) ){
                 require_once 'offer.php';
+                $set = 3;
 
                 if($sql){
                 while($result = mysqli_fetch_assoc($sql)){
+                    // echo $result['description'];
                      if($result["kind"] == $pref_one){
                          $response['error'] = false;
+                         $set = 1; 
                          $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"]. ' .';
 
                      }
-                     else if($result["kind"] == $pref_two){
+                    }
+                  while($result = mysqli_fetch_assoc($sql)&&$set!=1){
+                    // echo $result['description'];
+                     if($result["kind"] == $pref_two){
                          $response['error'] = false;
-                         $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"];
+                         $set = 2; 
+                         $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"]. ' .';
+
                      }
-                     else{
+                    }
+                  if($set>2){
                          $response['error'] = true;
-                         $response['message'] = 'No offers near you now !';
-                         }
-                
+                         $response['message'] = "No offers sadly";
+                  }
+
+                  
+               
                        }
    
                     }
             
-                 }
+                 
             else{
                   $response['error'] = true;
                   $response['message'] = "All necessary parameters are not there";
