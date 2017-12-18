@@ -13,7 +13,7 @@
             case 'signup':
             //will be the register page
             if(checkIfAllParametersAreTrue(array('username', 'password','gender','mobile_number',
-                'car_reg', 'car_size') ) ){
+                'car_reg', 'car_size','pref_one','pref_two') ) ){
                 require_once 'register.php';
                 if($result){
                     $response['error'] = false;
@@ -116,8 +116,6 @@
                 else{
                    $response['error'] = true;
                    $response['message'] = 'Unable to locate your car, please try again ';
-
-
                 }
             }
 
@@ -148,7 +146,8 @@
 
                     if($query_update){
                          $response['error'] = false;
-                         $response['message'] = 'Thank you for visiting us ! Rs.  '.$cost.' is the cost';
+                         $response['message'] = 'Thank you for visiting us ! Rs.
+                           '.$cost.' is the cost';
 
 
                 }
@@ -161,6 +160,59 @@
             }
 
             break;
+
+            case 'bring_offers': 
+            /*
+                * 1=>cosmetics
+                * 2=>clothing
+                * 3=>food
+                * 4=>electronics 
+                * 5=>addons
+            */
+            if(checkIfAllParametersAreTrue(array('username') ) ){
+                require_once 'offer.php';
+                $set = 3;
+
+                if($sql){
+                while($result = mysqli_fetch_assoc($sql)){
+                    // echo $result['description'];
+                     if($result["kind"] == $pref_one){
+                         $response['error'] = false;
+                         $set = 1; 
+                         $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"]. ' .';
+
+                     }
+                    }
+                  while($result = mysqli_fetch_assoc($sql)&&$set!=1){
+                    // echo $result['description'];
+                     if($result["kind"] == $pref_two){
+                         $response['error'] = false;
+                         $set = 2; 
+                         $response['message'] = 'Hurry up while there is an offer near you ! '.$result["description"].' @ '.$result["name"]. ' .';
+
+                     }
+                    }
+                  if($set>2){
+                         $response['error'] = true;
+                         $response['message'] = "No offers sadly";
+                  }
+
+                  
+               
+                       }
+   
+                    }
+            
+                 
+            else{
+                  $response['error'] = true;
+                  $response['message'] = "All necessary parameters are not there";
+            }
+
+            case ''
+
+            break;
+
 
             default:
             $response['error'] = true;
